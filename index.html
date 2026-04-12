@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<title>Reglamento — 115 Halsted St</title>
+<title>Regulations — 115 Halsted St</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -998,11 +998,13 @@
 }());
 </script>
 <script>
+  var titles = { es: 'Reglamento — 115 Halsted St', en: 'Regulations — 115 Halsted St' };
   function setLang(lang) {
     document.body.className = 'lang-' + lang;
     document.getElementById('btn-es').classList.toggle('active', lang === 'es');
     document.getElementById('btn-en').classList.toggle('active', lang === 'en');
     document.documentElement.lang = lang;
+    document.title = titles[lang] || titles.en;
     try { localStorage.setItem('prefLang', lang); } catch(e) {}
   }
 
