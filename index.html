@@ -357,6 +357,54 @@
     main { padding: 0 12px 40px; }
   }
 
+  /* ─── RULE CARD IMAGE EXPAND ─── */
+  .rule-card { flex-wrap: wrap; }
+
+  .rule-img-btn {
+    background: none;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 6px;
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    color: var(--muted);
+    padding: 0;
+    align-self: flex-start;
+  }
+  .rule-img-btn svg { width: 14px; height: 14px; pointer-events: none; }
+
+  .rule-media {
+    width: 100%;
+    height: 0;
+    overflow: hidden;
+  }
+
+  .rule-media-inner { padding-top: 10px; }
+
+  .rule-media-img {
+    width: 100%;
+    border-radius: 8px;
+    display: block;
+  }
+  .rule-media-img[src=""] { display: none; }
+  .rule-media-img:not([src=""]) ~ .rule-media-placeholder { display: none; }
+
+  .rule-media-placeholder {
+    background: var(--bg3);
+    border: 1px dashed rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 18px 16px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .hero-eyebrow, .hero-title, .hero-address, .hero-tags .tag,
     .divider-line, .section-heading, .rule-card, .compliance-banner,
@@ -398,7 +446,7 @@
   <div class="hero-eyebrow" data-lang="en">Official Building Regulations</div>
   <h1 class="hero-title" data-lang="es">115 Halsted Street</h1>
   <h1 class="hero-title" data-lang="en">115 Halsted Street</h1>
-  <div class="hero-address">Chicago, IL</div>
+  <div class="hero-address">East Orange, NJ 07017</div>
   <div class="hero-tags">
     <span class="tag">
       <svg viewBox="0 0 12 12"><path d="M6 1l.8 2.6H9.5L7.1 5.3l.8 2.6L6 6.2l-1.9 1.7.8-2.6L2.5 3.6H5.2z"/></svg>
@@ -860,7 +908,7 @@
 </div>
 
 <footer>
-  © 2026 · 115 Halsted Street · Chicago, IL &nbsp;·&nbsp;
+  © 2026 · 115 Halsted Street · East Orange, NJ 07017 &nbsp;·&nbsp;
   <span data-lang="es">Administración del Edificio</span>
   <span data-lang="en">Building Management</span>
   &nbsp;·&nbsp; <a href="https://github.com/Jio7g" target="_blank" rel="noopener noreferrer" style="color:var(--muted);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--muted)'">JioDev</a>
@@ -873,6 +921,36 @@
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   gsap.registerPlugin(ScrollTrigger);
+
+  /* ── Inject expand button + media div into every rule card ── */
+  var expandIcon = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="14" height="10" rx="1.5"/><circle cx="5.5" cy="7" r="1.5"/><path d="M1 11.5l4-3 3 2.5 3-3.5 4 3.5"/></svg>';
+
+  document.querySelectorAll('.rule-card').forEach(function(card) {
+    var btn = document.createElement('button');
+    btn.className = 'rule-img-btn';
+    btn.setAttribute('aria-expanded', 'false');
+    btn.setAttribute('aria-label', 'Ver imagen · View image');
+    btn.innerHTML = expandIcon;
+    card.appendChild(btn);
+
+    var media = document.createElement('div');
+    media.className = 'rule-media';
+    var inner = document.createElement('div');
+    inner.className = 'rule-media-inner';
+    var img = document.createElement('img');
+    img.className = 'rule-media-img';
+    img.alt = '';
+    img.loading = 'lazy';
+    img.src = card.getAttribute('data-image') || '';
+    var ph = document.createElement('div');
+    ph.className = 'rule-media-placeholder';
+    ph.innerHTML = '<span data-lang="es">Imagen de referencia próximamente</span>'
+                 + '<span data-lang="en">Reference image coming soon</span>';
+    inner.appendChild(img);
+    inner.appendChild(ph);
+    media.appendChild(inner);
+    card.appendChild(media);
+  });
 
   /* ── Helper: filter out display:none data-lang elements ── */
   function vis(selector) {
@@ -986,6 +1064,28 @@
     });
     card.addEventListener('mouseleave', function () {
       gsap.to(card, { borderColor: 'rgba(255,255,255,0.05)', y: 0, duration: 0.25, overwrite: 'auto' });
+    });
+  });
+
+  /* ── 9. Expand/collapse image per rule card ── */
+  document.querySelectorAll('.rule-img-btn').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var card = btn.closest('.rule-card');
+      var media = card.querySelector('.rule-media');
+      var isOpen = btn.getAttribute('aria-expanded') === 'true';
+
+      if (!isOpen) {
+        btn.setAttribute('aria-expanded', 'true');
+        gsap.to(media, { height: 'auto', duration: 0.4, ease: 'power2.out', overwrite: 'auto' });
+        gsap.to(btn, { borderColor: 'rgba(201,168,76,0.4)', duration: 0.2, overwrite: 'auto' });
+        gsap.to(btn.querySelector('svg'), { rotation: 180, duration: 0.3, ease: 'back.out(1.4)', overwrite: 'auto' });
+      } else {
+        btn.setAttribute('aria-expanded', 'false');
+        gsap.to(media, { height: 0, duration: 0.3, ease: 'power2.in', overwrite: 'auto' });
+        gsap.to(btn, { borderColor: 'rgba(255,255,255,0.08)', duration: 0.2, overwrite: 'auto' });
+        gsap.to(btn.querySelector('svg'), { rotation: 0, duration: 0.3, overwrite: 'auto' });
+      }
     });
   });
 }());
