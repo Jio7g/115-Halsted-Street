@@ -243,10 +243,7 @@
     display: flex;
     align-items: flex-start;
     gap: 12px;
-    transition: border-color 0.2s;
   }
-
-  .rule-card:hover { border-color: var(--border); }
 
   .rule-dot {
     width: 6px;
@@ -352,16 +349,6 @@
   .lang-en .bilingual .rule-text .main-line { color: var(--muted); font-size: 13px; font-style: italic; }
   .lang-en .bilingual .rule-text .en-line { font-size: 15px; color: var(--text); font-style: normal; }
 
-  /* Fade transition */
-  .section-heading, .rules-grid, .section-title, .hero-title {
-    animation: fadeUp 0.4s ease both;
-  }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(8px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
   /* ─── RESPONSIVE ─── */
   @media (max-width: 480px) {
     header { padding: 12px 16px; }
@@ -369,9 +356,18 @@
     .lang-btn { padding: 5px 10px; font-size: 11px; }
     main { padding: 0 12px 40px; }
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-eyebrow, .hero-title, .hero-address, .hero-tags .tag,
+    .divider-line, .section-heading, .rule-card, .compliance-banner,
+    .closing-quote, .closing-sub {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
 </style>
 </head>
-<body class="lang-es">
+<body class="lang-en">
 
 <!-- HEADER -->
 <header>
@@ -391,8 +387,8 @@
     </div>
   </div>
   <div class="lang-toggle">
-    <button class="lang-btn active" onclick="setLang('es')" id="btn-es">ES</button>
-    <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
+    <button class="lang-btn" onclick="setLang('es')" id="btn-es">ES</button>
+    <button class="lang-btn active" onclick="setLang('en')" id="btn-en">EN</button>
   </div>
 </header>
 
@@ -876,6 +872,130 @@
   <span data-lang="en">Building Management</span>
 </footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(function () {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  /* ── Helper: filter out display:none data-lang elements ── */
+  function vis(selector) {
+    return Array.from(document.querySelectorAll(selector))
+      .filter(function (el) { return window.getComputedStyle(el).display !== 'none'; });
+  }
+
+  /* ── 1. Initial hidden states ── */
+  gsap.set('header', { y: -40, opacity: 0 });
+  gsap.set(vis('.hero-eyebrow'), { y: 20, opacity: 0 });
+  gsap.set(vis('.hero-title'), { y: 30, opacity: 0, willChange: 'transform' });
+  gsap.set('.hero-address', { opacity: 0 });
+  gsap.set('.hero-tags .tag', { y: 15, opacity: 0, willChange: 'transform' });
+  gsap.set('.divider-line', { scaleX: 0, transformOrigin: 'left center', willChange: 'transform' });
+  gsap.set('.section-icon', { scale: 0.7, opacity: 0, willChange: 'transform' });
+  gsap.set(vis('.section-label'), { x: -20, opacity: 0, willChange: 'transform' });
+  gsap.set(vis('.section-heading .section-title'), { x: -20, opacity: 0, willChange: 'transform' });
+  gsap.set('.rule-card', { y: 24, opacity: 0, willChange: 'transform' });
+  gsap.set('.compliance-banner', { scale: 0.96, opacity: 0, willChange: 'transform' });
+  gsap.set(vis('.closing-quote'), { y: 20, opacity: 0 });
+  gsap.set(vis('.closing-sub'), { opacity: 0 });
+
+  /* ── 2. Hero load sequence (no scroll) ── */
+  var heroTl = gsap.timeline();
+  heroTl
+    .to('header', { y: 0, opacity: 1, duration: 0.6, ease: 'power2.out' })
+    .to(vis('.hero-eyebrow'), { y: 0, opacity: 1, duration: 0.5 }, 0.2)
+    .to(vis('.hero-title'), { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out' }, 0.35)
+    .to('.hero-address', { opacity: 1, duration: 0.4 }, 0.55)
+    .to('.hero-tags .tag', { y: 0, opacity: 1, stagger: 0.1, duration: 0.4 }, 0.65);
+
+  /* ── 3. Dividers — line draw ── */
+  document.querySelectorAll('.divider').forEach(function (divider) {
+    var lines = divider.querySelectorAll('.divider-line');
+    gsap.to(lines, {
+      scaleX: 1,
+      duration: 0.8,
+      ease: 'power2.out',
+      stagger: 0.1,
+      scrollTrigger: {
+        trigger: divider,
+        start: 'top 88%',
+        toggleActions: 'play none none none'
+      }
+    });
+  });
+
+  /* ── 4. Section headings ── */
+  document.querySelectorAll('.section-heading').forEach(function (heading) {
+    var icon = heading.querySelector('.section-icon');
+    var labels = Array.from(heading.querySelectorAll('.section-label, .section-title'))
+      .filter(function (el) { return window.getComputedStyle(el).display !== 'none'; });
+
+    var tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: heading,
+        start: 'top 85%',
+        toggleActions: 'play none none none'
+      }
+    });
+    tl.to(icon, { scale: 1, opacity: 1, duration: 0.5, ease: 'back.out(1.7)' })
+      .to(labels, { x: 0, opacity: 1, stagger: 0.08, duration: 0.45, ease: 'power2.out' }, '<');
+  });
+
+  /* ── 5. Rule cards — staggered by grid ── */
+  document.querySelectorAll('.rules-grid').forEach(function (grid) {
+    gsap.to(grid.querySelectorAll('.rule-card'), {
+      y: 0,
+      opacity: 1,
+      stagger: 0.07,
+      duration: 0.45,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: grid,
+        start: 'top 90%',
+        toggleActions: 'play none none none'
+      }
+    });
+  });
+
+  /* ── 6. Compliance banner ── */
+  gsap.to('.compliance-banner', {
+    scale: 1,
+    opacity: 1,
+    duration: 0.5,
+    ease: 'power2.out',
+    scrollTrigger: {
+      trigger: '.compliance-banner',
+      start: 'top 88%',
+      toggleActions: 'play none none none'
+    }
+  });
+
+  /* ── 7. Closing section ── */
+  var closingEl = document.querySelector('.closing');
+  var closingTl = gsap.timeline({
+    scrollTrigger: {
+      trigger: closingEl,
+      start: 'top 85%',
+      toggleActions: 'play none none none'
+    }
+  });
+  closingTl
+    .to(vis('.closing-quote'), { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out' })
+    .to(vis('.closing-sub'), { opacity: 1, duration: 0.4 }, '+=0.2');
+
+  /* ── 8. Hover micro-interactions ── */
+  document.querySelectorAll('.rule-card').forEach(function (card) {
+    card.addEventListener('mouseenter', function () {
+      gsap.to(card, { borderColor: 'rgba(201,168,76,0.4)', y: -2, duration: 0.2, overwrite: 'auto' });
+    });
+    card.addEventListener('mouseleave', function () {
+      gsap.to(card, { borderColor: 'rgba(255,255,255,0.05)', y: 0, duration: 0.25, overwrite: 'auto' });
+    });
+  });
+}());
+</script>
 <script>
   function setLang(lang) {
     document.body.className = 'lang-' + lang;
@@ -892,7 +1012,7 @@
       if (saved) { setLang(saved); return; }
     } catch(e) {}
     var bl = (navigator.language || '').toLowerCase();
-    if (bl.startsWith('en')) setLang('en');
+    if (bl.startsWith('es')) setLang('es');
   })();
 </script>
 </body>
