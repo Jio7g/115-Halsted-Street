@@ -23,14 +23,29 @@
     --accent: #3A7BD5;
   }
 
+  [data-theme="light"] {
+    --bg: #F8F9FA;
+    --bg2: #FFFFFF;
+    --bg3: #E9ECEF;
+    --surface: #F1F3F5;
+    --border: rgba(182, 145, 58, 0.25);
+    --text: #1A1F26;
+    --muted: #4F5E6D;
+    --gold: #A57D28;
+    --gold-light: #785A14;
+    --gold-pale: #88671B;
+  }
+
   body {
     background: var(--bg);
     color: var(--text);
     font-family: 'Jost', sans-serif;
-    font-weight: 300;
+    font-weight: 400;
     font-size: 16px;
     line-height: 1.7;
     min-height: 100vh;
+    overflow-x: hidden;
+    transition: background-color 0.4s ease, color 0.4s ease;
   }
 
   /* ─── HEADER ─── */
@@ -38,14 +53,20 @@
     position: sticky;
     top: 0;
     z-index: 100;
-    background: rgba(13,17,23,0.92);
-    backdrop-filter: blur(12px);
+    background: rgba(13,17,23,0.85);
+    backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border);
     padding: 14px 24px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 12px;
+    transition: background-color 0.4s ease, border-color 0.4s ease;
+  }
+
+  [data-theme="light"] header {
+    background: rgba(255, 255, 255, 0.85);
+    border-bottom: 1px solid rgba(0,0,0,0.06);
   }
 
   .header-brand {
@@ -76,6 +97,37 @@
     font-weight: 400;
     text-transform: uppercase;
   }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .theme-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--gold);
+    transition: all 0.3s ease;
+    padding: 0;
+  }
+
+  .theme-btn:hover {
+    transform: scale(1.05);
+    border-color: var(--gold);
+  }
+
+  .theme-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; }
+  .moon-icon { display: none; }
+  [data-theme="light"] .sun-icon { display: none; }
+  [data-theme="light"] .moon-icon { display: block; }
 
   /* ─── LANG TOGGLE ─── */
   .lang-toggle {
@@ -111,46 +163,93 @@
 
   /* ─── HERO ─── */
   .hero {
-    text-align: center;
-    padding: 56px 24px 40px;
     position: relative;
+    min-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 120px 24px 80px;
+    text-align: center;
     overflow: hidden;
+    background: var(--bg);
+    transition: background-color 0.4s ease;
   }
 
   .hero::before {
     content: '';
     position: absolute;
-    top: -40px; left: 50%;
-    transform: translateX(-50%);
-    width: 400px; height: 300px;
-    background: radial-gradient(ellipse, rgba(201,168,76,0.12) 0%, transparent 70%);
-    pointer-events: none;
+    inset: 0;
+    background-image: url('https://res.cloudinary.com/dlaclkuni/image/upload/q_auto/f_auto/v1776793826/background_building_qa4usb.png'); 
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+    opacity: 0.5;
+    -webkit-mask-image: linear-gradient(to bottom, black 100%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 100%, transparent 100%);
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(13, 17, 23, 0.4) 0%,
+      rgba(13, 17, 23, 0.7) 50%,
+      var(--bg) 100%
+    );
+    z-index: 1;
+    transition: background 0.4s ease;
+  }
+
+  [data-theme="light"] .hero::after {
+    background: linear-gradient(
+      to bottom,
+      rgba(248, 249, 250, 0.2) 0%,
+      rgba(248, 249, 250, 0.8) 50%,
+      var(--bg) 100%
+    );
+  }
+
+  .hero-eyebrow, .hero-title, .hero-address, .hero-tags {
+    position: relative;
+    z-index: 2;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.6);
+  }
+
+  [data-theme="light"] .hero-eyebrow,
+  [data-theme="light"] .hero-title,
+  [data-theme="light"] .hero-address,
+  [data-theme="light"] .hero-tags {
+    text-shadow: 0 2px 15px rgba(255, 255, 255, 0.9), 0 0 5px rgba(255, 255, 255, 0.7);
   }
 
   .hero-eyebrow {
-    font-size: 11px;
-    letter-spacing: 0.2em;
+    font-size: 12px;
+    letter-spacing: 0.25em;
     text-transform: uppercase;
     color: var(--gold);
     font-weight: 500;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
   }
 
   .hero-title {
     font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(34px, 8vw, 52px);
+    font-size: clamp(42px, 10vw, 72px);
     font-weight: 700;
-    line-height: 1.1;
+    line-height: 1.05;
     color: var(--gold-light);
-    letter-spacing: -0.01em;
-    margin-bottom: 8px;
+    letter-spacing: -0.03em;
+    margin-bottom: 12px;
   }
 
   .hero-address {
-    font-size: 14px;
-    color: var(--muted);
-    letter-spacing: 0.06em;
-    margin-bottom: 24px;
+    font-size: 15px;
+    color: var(--text);
+    letter-spacing: 0.08em;
+    margin-bottom: 32px;
+    opacity: 0.9;
   }
 
   .hero-tags {
@@ -175,6 +274,70 @@
 
   .tag svg { width: 12px; height: 12px; fill: var(--gold); }
 
+  /* ─── HERO ACTION ─── */
+  .hero-action {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    z-index: 2;
+  }
+
+  .cta-button {
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold-light);
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 12px 32px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(4px);
+  }
+
+  .cta-button:hover {
+    background: var(--gold);
+    color: var(--bg);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(201, 168, 76, 0.3);
+  }
+
+  [data-theme="light"] .cta-button {
+    color: var(--gold);
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  [data-theme="light"] .cta-button:hover {
+    background: var(--gold);
+    color: #fff;
+  }
+
+  .scroll-indicator {
+    color: var(--gold-light);
+    animation: bounce 2s infinite ease-in-out;
+    cursor: pointer;
+    opacity: 0.8;
+  }
+
+  [data-theme="light"] .scroll-indicator {
+    color: var(--gold);
+  }
+
+  .scroll-indicator svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(8px); }
+  }
+
   /* ─── DIVIDER ─── */
   .divider {
     display: flex;
@@ -185,10 +348,11 @@
   }
   .divider-line { flex: 1; height: 1px; background: var(--border); }
   .divider-text {
-    font-size: 10px;
+    font-size: 11px;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--muted);
+    font-weight: 500;
   }
 
   /* ─── CONTENT ─── */
@@ -216,7 +380,7 @@
   .section-icon svg { width: 20px; height: 20px; }
 
   .section-label {
-    font-size: 10px;
+    font-size: 11px;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--gold);
@@ -243,6 +407,12 @@
     display: flex;
     align-items: flex-start;
     gap: 12px;
+    transition: all 0.3s ease;
+  }
+
+  [data-theme="light"] .rule-card {
+    border-color: rgba(0,0,0,0.05);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
   }
 
   .rule-dot {
@@ -282,6 +452,7 @@
     border-radius: 16px;
     padding: 24px 20px;
     text-align: center;
+    transition: all 0.3s ease;
   }
 
   .compliance-icon {
@@ -434,9 +605,15 @@
       <div class="header-subtitle">Building Regulations</div>
     </div>
   </div>
-  <div class="lang-toggle">
-    <button class="lang-btn" onclick="setLang('es')" id="btn-es">ES</button>
-    <button class="lang-btn active" onclick="setLang('en')" id="btn-en">EN</button>
+  <div class="header-actions">
+    <button class="theme-btn" onclick="toggleTheme()" id="theme-toggle" aria-label="Cambiar tema">
+      <svg class="sun-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <svg class="moon-icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+    <div class="lang-toggle">
+      <button class="lang-btn" onclick="setLang('es')" id="btn-es">ES</button>
+      <button class="lang-btn active" onclick="setLang('en')" id="btn-en">EN</button>
+    </div>
   </div>
 </header>
 
@@ -460,6 +637,19 @@
       <svg viewBox="0 0 12 12"><path d="M6 1C4 3 2 5 2 7a4 4 0 108 0C10 5 8 3 6 1z"/></svg>
       <span data-lang="es">Convivencia</span><span data-lang="en">Community</span>
     </span>
+  </div>
+  
+  <div class="hero-action">
+    <button class="cta-button" onclick="scrollToRules()">
+      <span data-lang="es">Ver reglamento</span>
+      <span data-lang="en">View regulations</span>
+    </button>
+    <div class="scroll-indicator" onclick="scrollToRules()" role="button" aria-label="Scroll down">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="4" x2="12" y2="20"></line>
+        <polyline points="19 13 12 20 5 13"></polyline>
+      </svg>
+    </div>
   </div>
 </div>
 
@@ -922,6 +1112,35 @@
 
   gsap.registerPlugin(ScrollTrigger);
 
+  /* ── Theme Toggle Logic ── */
+  window.toggleTheme = function() {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    
+    gsap.from('#theme-toggle svg', { rotation: 90, opacity: 0, duration: 0.4 });
+  };
+
+  // Init theme
+  (function() {
+    const savedTheme = localStorage.getItem('theme') || 
+          (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  })();
+
+  /* ── Scroll To Rules ── */
+  window.scrollToRules = function() {
+    const mainContent = document.querySelector('main');
+    if (mainContent) {
+      window.scrollTo({
+        top: mainContent.offsetTop - 80,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   /* ── Inject expand button + media div into every rule card ── */
   var expandIcon = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="14" height="10" rx="1.5"/><circle cx="5.5" cy="7" r="1.5"/><path d="M1 11.5l4-3 3 2.5 3-3.5 4 3.5"/></svg>';
 
@@ -964,6 +1183,7 @@
   gsap.set(vis('.hero-title'), { y: 30, opacity: 0, willChange: 'transform' });
   gsap.set('.hero-address', { opacity: 0 });
   gsap.set('.hero-tags .tag', { y: 15, opacity: 0, willChange: 'transform' });
+  gsap.set('.hero-action', { y: 20, opacity: 0, willChange: 'transform' });
   gsap.set('.divider-line', { scaleX: 0, transformOrigin: 'left center', willChange: 'transform' });
   gsap.set('.section-icon', { scale: 0.7, opacity: 0, willChange: 'transform' });
   gsap.set(vis('.section-label'), { x: -20, opacity: 0, willChange: 'transform' });
@@ -980,7 +1200,8 @@
     .to(vis('.hero-eyebrow'), { y: 0, opacity: 1, duration: 0.5 }, 0.2)
     .to(vis('.hero-title'), { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out' }, 0.35)
     .to('.hero-address', { opacity: 1, duration: 0.4 }, 0.55)
-    .to('.hero-tags .tag', { y: 0, opacity: 1, stagger: 0.1, duration: 0.4 }, 0.65);
+    .to('.hero-tags .tag', { y: 0, opacity: 1, stagger: 0.1, duration: 0.4 }, 0.65)
+    .to('.hero-action', { y: 0, opacity: 1, duration: 0.5, ease: 'power2.out' }, 0.85);
 
   /* ── 3. Dividers — line draw ── */
   document.querySelectorAll('.divider').forEach(function (divider) {
