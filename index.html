@@ -1289,23 +1289,42 @@
   });
 
   /* ── 9. Expand/collapse image per rule card ── */
+  function toggleCardMedia(btn, forceState) {
+    var card = btn.closest('.rule-card');
+    var media = card.querySelector('.rule-media');
+    var isOpen = btn.getAttribute('aria-expanded') === 'true';
+
+    var newState = forceState !== undefined ? forceState : !isOpen;
+    if (newState === isOpen) return;
+
+    if (newState) {
+      btn.setAttribute('aria-expanded', 'true');
+      gsap.to(media, { height: 'auto', duration: 0.4, ease: 'power2.out', overwrite: 'auto' });
+      gsap.to(btn, { borderColor: 'rgba(201,168,76,0.4)', duration: 0.2, overwrite: 'auto' });
+      gsap.to(btn.querySelector('svg'), { rotation: 180, duration: 0.3, ease: 'back.out(1.4)', overwrite: 'auto' });
+    } else {
+      btn.setAttribute('aria-expanded', 'false');
+      gsap.to(media, { height: 0, duration: 0.3, ease: 'power2.in', overwrite: 'auto' });
+      gsap.to(btn, { borderColor: 'rgba(255,255,255,0.08)', duration: 0.2, overwrite: 'auto' });
+      gsap.to(btn.querySelector('svg'), { rotation: 0, duration: 0.3, overwrite: 'auto' });
+    }
+  }
+
   document.querySelectorAll('.rule-img-btn').forEach(function(btn) {
+    var card = btn.closest('.rule-card');
+    
     btn.addEventListener('click', function(e) {
       e.stopPropagation();
-      var card = btn.closest('.rule-card');
-      var media = card.querySelector('.rule-media');
-      var isOpen = btn.getAttribute('aria-expanded') === 'true';
+      toggleCardMedia(btn);
+    });
 
-      if (!isOpen) {
-        btn.setAttribute('aria-expanded', 'true');
-        gsap.to(media, { height: 'auto', duration: 0.4, ease: 'power2.out', overwrite: 'auto' });
-        gsap.to(btn, { borderColor: 'rgba(201,168,76,0.4)', duration: 0.2, overwrite: 'auto' });
-        gsap.to(btn.querySelector('svg'), { rotation: 180, duration: 0.3, ease: 'back.out(1.4)', overwrite: 'auto' });
-      } else {
-        btn.setAttribute('aria-expanded', 'false');
-        gsap.to(media, { height: 0, duration: 0.3, ease: 'power2.in', overwrite: 'auto' });
-        gsap.to(btn, { borderColor: 'rgba(255,255,255,0.08)', duration: 0.2, overwrite: 'auto' });
-        gsap.to(btn.querySelector('svg'), { rotation: 0, duration: 0.3, overwrite: 'auto' });
+    ScrollTrigger.create({
+      trigger: card,
+      start: 'top 75%',
+      onEnter: function() { 
+        if (card.getAttribute('data-image')) {
+          toggleCardMedia(btn, true); 
+        }
       }
     });
   });
