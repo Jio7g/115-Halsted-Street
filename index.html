@@ -475,6 +475,75 @@
   }
   .compliance-text strong { color: var(--text); font-weight: 500; }
 
+  /* ─── CONTACT SECTION ─── */
+  .contact-section {
+    margin: 40px 0 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px 24px;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+
+  .contact-icon {
+    width: 48px; height: 48px;
+    margin: 0 auto 14px;
+    background: rgba(37,211,102,0.12);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .contact-icon svg { width: 24px; height: 24px; fill: #25D366; }
+
+  .contact-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--gold-light);
+    margin-bottom: 6px;
+  }
+
+  .contact-sub {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+    max-width: 380px;
+    margin: 0 auto 22px;
+  }
+
+  .whatsapp-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #25D366;
+    color: #fff;
+    font-family: 'Jost', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 14px 30px;
+    border-radius: 50px;
+    text-decoration: none;
+    letter-spacing: 0.03em;
+    transition: all 0.3s ease;
+  }
+
+  .whatsapp-btn:hover {
+    background: #1ebe5d;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 22px rgba(37,211,102,0.35);
+  }
+
+  .whatsapp-btn svg { width: 22px; height: 22px; fill: #fff; flex-shrink: 0; }
+
+  .contact-number {
+    margin-top: 14px;
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+  }
+
   /* ─── CLOSING ─── */
   .closing {
     text-align: center;
@@ -578,7 +647,7 @@
 
   @media (prefers-reduced-motion: reduce) {
     .hero-eyebrow, .hero-title, .hero-address, .hero-tags .tag,
-    .divider-line, .section-heading, .rule-card, .compliance-banner,
+    .divider-line, .section-heading, .rule-card, .contact-section, .compliance-banner,
     .closing-quote, .closing-sub {
       opacity: 1 !important;
       transform: none !important;
@@ -1072,6 +1141,30 @@
       <span data-lang="en">Keep hallways clear at all times. Bicycles, strollers, and furniture are not permitted in hallways.</span>
     </div>
   </div>
+  <div class="rule-card highlight" data-image="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcmtkcnE2dnRpMmJudHZvejFrdGk4OG95YXhob2xzZnEwMmdib2gzYiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/o2V3s21kb9jPO/giphy.gif">
+    <div class="rule-dot"></div>
+    <div class="rule-text">
+      <span data-lang="es">Al sacar muebles pesados, por favor contactar al super antes de comenzar.</span>
+      <span data-lang="en">When moving heavy furniture, please contact the super beforehand.</span>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT SECTION -->
+<div class="contact-section">
+  <div class="contact-icon">
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </div>
+  <div class="contact-title" data-lang="es">¿Necesitas ayuda?</div>
+  <div class="contact-title" data-lang="en">Need help?</div>
+  <p class="contact-sub" data-lang="es">Para reportar un problema o comunicarte con el superintendente del edificio, escríbenos directamente por WhatsApp.</p>
+  <p class="contact-sub" data-lang="en">To report an issue or reach the building superintendent, message us directly on WhatsApp.</p>
+  <a href="https://wa.me/19084048468" class="whatsapp-btn" target="_blank" rel="noopener noreferrer">
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    <span data-lang="es">Contactar al Super</span>
+    <span data-lang="en">Contact the Super</span>
+  </a>
+  <div class="contact-number">908 404 8468</div>
 </div>
 
 <!-- COMPLIANCE BANNER -->
@@ -1189,6 +1282,7 @@
   gsap.set(vis('.section-label'), { x: -20, opacity: 0, willChange: 'transform' });
   gsap.set(vis('.section-heading .section-title'), { x: -20, opacity: 0, willChange: 'transform' });
   gsap.set('.rule-card', { y: 24, opacity: 0, willChange: 'transform' });
+  gsap.set('.contact-section', { scale: 0.96, opacity: 0, willChange: 'transform' });
   gsap.set('.compliance-banner', { scale: 0.96, opacity: 0, willChange: 'transform' });
   gsap.set(vis('.closing-quote'), { y: 20, opacity: 0 });
   gsap.set(vis('.closing-sub'), { opacity: 0 });
@@ -1252,7 +1346,20 @@
     });
   });
 
-  /* ── 6. Compliance banner ── */
+  /* ── 6. Contact section ── */
+  gsap.to('.contact-section', {
+    scale: 1,
+    opacity: 1,
+    duration: 0.5,
+    ease: 'power2.out',
+    scrollTrigger: {
+      trigger: '.contact-section',
+      start: 'top 88%',
+      toggleActions: 'play none none none'
+    }
+  });
+
+  /* ── 6b. Compliance banner ── */
   gsap.to('.compliance-banner', {
     scale: 1,
     opacity: 1,
